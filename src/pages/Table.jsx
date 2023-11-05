@@ -12,6 +12,7 @@ const Table = () => {
   const [data, setData] = useState([]);
   const { sortBy, sortOrder, handleSort } = useSort("title", "asc");
   const [filteredData, setFilteredData] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const Table = () => {
       const parsedData = JSON.parse(savedData);
       console.log(parsedData);
       setData(parsedData);
+      setFilteredData(parsedData);
     } else {
       const newData = generateData(10);
       setData(newData);
@@ -32,7 +34,6 @@ const Table = () => {
 
   const sendDataToSingleProduct = (id) => {
     const singleData = data.find((item) => item.id === id);
-    console.log("in table SendData", singleData);
     navigate(`/${id}`, { state: { singleData } });
   };
 
@@ -51,8 +52,20 @@ const Table = () => {
     }
   };
 
+  const handleCheckedItems = (id) => {
+    const foundData = data.find((item) => item.id === id);
+    debugger;
+    setCheckedItems((prevState) => [...prevState, foundData]);
+    console.log("handleCheckedItems", checkedItems);
+  };
+
+  useEffect(() => {
+    console.log("handleCheckedItems", checkedItems);
+  }, [checkedItems]);
+
   return (
     <>
+      {/* <pre>{JSON.stringify(data)}</pre> */}
       {/* <pre>{JSON.stringify(filteredData)}</pre> */}
       <div className="my-4">
         <SearchBar onSearch={handleSearch} />
@@ -108,6 +121,9 @@ const Table = () => {
                         <input
                           type="checkbox"
                           className="checkbox checkbox-md bg-slate-300 text-black"
+                          onClick={() => {
+                            handleCheckedItems(data.id);
+                          }}
                         />
                       </td>
                       <td className="cursor-pointer">
