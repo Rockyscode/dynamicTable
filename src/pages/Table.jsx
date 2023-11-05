@@ -12,6 +12,7 @@ const Table = () => {
   const [data, setData] = useState([]);
   const { sortBy, sortOrder, handleSort } = useSort("title", "asc");
   const [filteredData, setFilteredData] = useState([]);
+  const [checkedItems, setCheckedItems] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,6 +30,10 @@ const Table = () => {
     }
     console.log(data.discount);
   }, []);
+  const handleCheckedItems = (id) => {
+    const foundData = data.find((item) => item.id === id);
+    setCheckedItems((checkedItems) => [...checkedItems, foundData]);
+  };
 
   const sendDataToSingleProduct = (id) => {
     const singleData = data.find((item) => item.id === id);
